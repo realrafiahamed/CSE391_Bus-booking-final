@@ -13,13 +13,13 @@ use App\Models\User;
 
 class AdminController extends Controller
 {
-    public function dashboard()
+    public function dashboard(Request $request)
     {
-        $today = Carbon::today()->toDateString();
+        $date = $request->date ?? Carbon::today()->toDateString();
         $bookings = DB::table('bookings')
             ->join('schedules', 'bookings.schedule_id', '=', 'schedules.id')
             ->join('routes', 'schedules.route_id', '=', 'routes.id')
-            ->where('bookings.travel_date', $today)
+            ->where('bookings.travel_date', $date)
             ->select(
                 'bookings.*',
                 'routes.from_location',
@@ -27,9 +27,10 @@ class AdminController extends Controller
                 'schedules.departure_time',
                 'schedules.arrival_time'
             )
+            ->orderBy('bookings.created_at', 'desc')
             ->get();
 
-        return view('admin.dashboard', compact('bookings'));
+        return view('admin.dashboard', compact('bookings', 'date'));
     }
 
     public function buses()

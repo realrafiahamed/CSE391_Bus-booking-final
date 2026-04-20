@@ -103,7 +103,11 @@
 <div class="container">
 
     <h2>Today’s Bookings</h2>
-
+    <form method="GET" action="/admin/dashboard" style="margin-bottom:15px;">
+        <input type="date" name="date" value="{{ $date }}">
+        <button type="submit">Filter</button>
+    </form>
+    
     <!-- TABLE -->
     <table>
         <tr>
